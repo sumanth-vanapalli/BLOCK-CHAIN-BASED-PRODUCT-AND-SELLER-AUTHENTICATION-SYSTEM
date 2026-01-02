@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body class="bg-light">
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container">
+        <span class="navbar-brand fw-bold">Manufacturer / User Dashboard</span>
+        <a href="/logout" class="btn btn-outline-warning btn-sm">Logout</a>
+    </div>
+</nav>
+
+<div class="container mt-5">
+
+    <!-- USER INFO -->
+    <div class="mb-4">
+        <h4>Welcome, <strong>{{ session["user"]["username"] }}</strong></h4>
+        <p class="text-muted">
+            Role: {{ session["user"]["role"] | capitalize }}
+        </p>
+    </div>
+
+    <!-- ACTION CARDS -->
+    <div class="row mb-5">
+        {% if session["user"]["role"] == "manufacturer" %}
+        <div class="col-md-4">
+            <div class="card p-3 shadow fade-in">
+                <h5>Add Product</h5>
+                <p class="text-muted">
+                    Register genuine products on blockchain
+                </p>
+                <a href="/add_product" class="btn btn-success w-100">
+                    ➕ Add Product
+                </a>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="col-md-4">
+            <div class="card p-3 shadow fade-in">
+                <h5>Verify Product</h5>
+                <p class="text-muted">
+                    Scan QR or enter Product ID
+                </p>
+                <a href="/verify_product" class="btn btn-primary w-100">
+                    🔍 Verify Product
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MANUFACTURER PRODUCT LIST -->
+    {% if session["user"]["role"] == "manufacturer" %}
+    <div class="card shadow fade-in p-4">
+        <h5 class="mb-3">My Products (Blockchain Records)</h5>
+
+        {% if products and products|length > 0 %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Product ID</th>
+                        <th>Product Name</th>
+                        <th>Manufacturer</th>
+                        <th>Blockchain Tx Hash</th>
+                        <th>QR Code</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in products %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ p.product_id }}</td>
+                        <td>{{ p.name }}</td>
+                        <td>{{ p.manufacturer }}</td>
+                        <td style="font-size: 12px; word-break: break-all;">
+                            {{ p.tx_hash }}
+                        </td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-outline-primary"
+                                    onclick="showQR('{{ p.product_id }}')">
+                                View QR
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+            <p class="text-muted">
+                No products added yet. Click <strong>Add Product</strong> to register your first product.
+            </p>
+        {% endif %}
+    </div>
+    {% endif %}
+
+</div>
+
+<!-- SINGLE GLOBAL QR MODAL (NO GLITCH) -->
+<div class="modal fade" id="qrModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="qrTitle">QR Code</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="qrImage" class="img-fluid" alt="QR Code">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="bg-dark text-white text-center p-3 mt-5">
+    © 2026 Fake Product Identification Using Blockchain
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- QR MODAL SCRIPT -->
+<script>
+    function showQR(productId) {
+        document.getElementById("qrTitle").innerText =
+            "QR Code – " + productId;
+
+        document.getElementById("qrImage").src =
+            "/static/qr_codes/" + productId + ".png";
+
+        const modal = new bootstrap.Modal(
+            document.getElementById("qrModal")
+        );
+        modal.show();
+    }
+</script>
+
+</body>
+</html>

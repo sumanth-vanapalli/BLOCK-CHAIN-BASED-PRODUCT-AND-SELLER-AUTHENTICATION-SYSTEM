@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verification Result</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <div class="card p-4 shadow fade-in text-center">
+        <h3 class="mb-3">Verification Result</h3>
+
+        {% if status %}
+            <div class="alert alert-success">
+                ✅ Genuine Product
+            </div>
+        {% else %}
+            <div class="alert alert-danger">
+                ❌ Fake Product
+            </div>
+        {% endif %}
+
+        <p><strong>Product:</strong> {{ name }}</p>
+        <p><strong>Manufacturer:</strong> {{ manufacturer }}</p>
+
+        <a href="/dashboard" class="btn btn-primary mt-3">Back to Dashboard</a>
+    </div>
+</div>
+
+</body>
+</html>

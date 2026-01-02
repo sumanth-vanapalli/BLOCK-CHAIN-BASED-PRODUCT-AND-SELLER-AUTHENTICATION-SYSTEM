@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container">
+        <span class="navbar-brand fw-bold">Admin Dashboard</span>
+        <a href="/logout" class="btn btn-warning btn-sm">Logout</a>
+    </div>
+</nav>
+
+<div class="container mt-4">
+
+    <!-- USERS SECTION -->
+    <h4 class="mb-3">👥 Users</h4>
+    <table class="table table-bordered align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th style="width: 120px;">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for u in users %}
+            <tr>
+                <td>{{ u.username }}</td>
+                <td>{{ u.role }}</td>
+                <td>
+                    {% if u.is_active %}
+                        <span class="badge bg-success">Active</span>
+                    {% else %}
+                        <span class="badge bg-danger">Disabled</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="/admin/toggle_user/{{ u.id }}"
+                       class="btn btn-sm btn-outline-danger">
+                        Toggle
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <hr class="my-4">
+
+    <!-- PRODUCTS SECTION -->
+    <h4 class="mb-3">📦 Products (Blockchain)</h4>
+    <table class="table table-bordered align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Product ID</th>
+                <th>Name</th>
+                <th>Manufacturer</th>
+                <th>Blockchain Tx</th>
+                <th style="width: 100px;">QR Code</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in products %}
+            <tr>
+                <td>{{ p.product_id }}</td>
+                <td>{{ p.name }}</td>
+                <td>{{ p.username }}</td>
+                <td style="font-size: 12px; word-break: break-all;">
+                    {{ p.tx_hash }}
+                </td>
+                <td class="text-center">
+                    <button class="btn btn-sm btn-outline-primary"
+                            onclick="showQR('{{ p.product_id }}')">
+                        View QR
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+<!-- SINGLE GLOBAL QR MODAL -->
+<div class="modal fade" id="qrModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="qrTitle">QR Code</h5>
+                <button type="button" class="btn-close"
+                        data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="qrImage" class="img-fluid" alt="QR Code">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- QR MODAL SCRIPT -->
+<script>
+    function showQR(productId) {
+        document.getElementById("qrTitle").innerText =
+            "QR Code – " + productId;
+
+        document.getElementById("qrImage").src =
+            "/static/qr_codes/" + productId + ".png";
+
+        const modal = new bootstrap.Modal(
+            document.getElementById("qrModal")
+        );
+        modal.show();
+    }
+</script>
+
+</body>
+</html>

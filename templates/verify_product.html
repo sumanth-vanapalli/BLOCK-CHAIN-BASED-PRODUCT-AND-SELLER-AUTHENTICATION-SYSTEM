@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verify Product</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+
+    <!-- QR Scanner Library -->
+    <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+    <div class="card p-4 shadow fade-in">
+        <h3 class="text-center mb-3">Verify Product</h3>
+
+        <!-- Product ID Form -->
+        <form method="POST" id="verifyForm">
+            <input type="text"
+                   id="product_id"
+                   name="product_id"
+                   class="form-control mb-3"
+                   placeholder="Enter Product ID"
+                   required>
+
+            <button class="btn btn-primary w-100">
+                Verify Product
+            </button>
+        </form>
+
+        <hr>
+
+        <!-- QR Scanner Button -->
+        <button class="btn btn-success w-100 mt-2" onclick="startScanner()">
+            📷 Scan QR Code
+        </button>
+
+        <!-- Camera View -->
+        <div id="reader" style="width:100%; margin-top:15px;"></div>
+    </div>
+</div>
+
+<script>
+    function startScanner() {
+        const html5QrCode = new Html5Qrcode("reader");
+
+        html5QrCode.start(
+            { facingMode: "environment" },
+            {
+                fps: 10,
+                qrbox: 250
+            },
+            (decodedText) => {
+                // 1️⃣ Put QR value into input
+                document.getElementById("product_id").value = decodedText;
+
+                // 2️⃣ Stop camera
+                html5QrCode.stop();
+
+                // 3️⃣ Clear camera UI
+                document.getElementById("reader").innerHTML = "";
+
+                // 4️⃣ AUTO SUBMIT FORM
+                document.getElementById("verifyForm").submit();
+            },
+            (error) => {
+                console.log(error);
+            }
+        );
+    }
+</script>
+
+</body>
+</html>

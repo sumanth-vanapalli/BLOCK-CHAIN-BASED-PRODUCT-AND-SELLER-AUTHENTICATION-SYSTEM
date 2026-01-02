@@ -1,0 +1,73 @@
+/* ----------------------------
+   GLOBAL PAGE ANIMATION
+-----------------------------*/
+body {
+    animation: fadeSlide 0.8s ease-in-out;
+}
+
+@keyframes fadeSlide {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ----------------------------
+   CARD ANIMATION
+-----------------------------*/
+.card {
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* ----------------------------
+   BUTTON ANIMATION
+-----------------------------*/
+.btn {
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+}
+
+/* ----------------------------
+   INPUT FOCUS EFFECT
+-----------------------------*/
+input:focus, select:focus {
+    box-shadow: 0 0 8px rgba(13,110,253,0.5);
+    border-color: #0d6efd;
+}
+
+/* ----------------------------
+   NAVBAR LINK ANIMATION
+-----------------------------*/
+.nav-link {
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #ffc107 !important;
+    transform: translateY(-2px);
+}
+
+/* ----------------------------
+   FADE-IN UTILITY CLASS
+-----------------------------*/
+.fade-in {
+    animation: fadeIn 1s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
